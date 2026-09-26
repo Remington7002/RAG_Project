@@ -1,25 +1,32 @@
 # Retrieval-Augmented Generation (RAG) Project
 
-A Retrieval-Augmented Generation (RAG) pipeline built as part of an AI/ML internship. The project focuses on preparing a large-scale crypto-news dataset for downstream semantic search, vector indexing, and Retrieval-Augmented Generation.
+A Retrieval-Augmented Generation (RAG) pipeline developed as part of an AI/ML internship. The project processes a large-scale cryptocurrency news dataset and implements the core stages of a RAG system, including data preprocessing, document chunking, embedding generation, vector database ingestion, semantic search, and retrieval benchmarking.
+
+---
 
 ## Project Overview
 
-This project processes a large collection of cryptocurrency news articles and prepares the data for a RAG system.
+This project builds a complete foundation for a Retrieval-Augmented Generation system using a large cryptocurrency news corpus.
 
-The current pipeline includes:
+The pipeline currently covers:
 
-* Environment verification
+* Environment setup and verification
 * Large-scale dataset preparation
-* HTML cleaning
+* Text preprocessing
+* HTML removal
 * Unicode normalization
 * Whitespace cleanup
 * Language filtering
-* JSONL-based corpus generation
-* Automated preprocessing tests
-* Python virtual environment
-* CPU-based machine learning environment
+* JSONL corpus generation
+* Document chunking
+* Sentence-Transformer embeddings
+* Embedding benchmarking
+* ChromaDB vector database ingestion
+* Semantic similarity search
+* Retrieval benchmarking
+* Automated unit testing
 
-The project is designed to continue toward document chunking, embedding generation, vector database indexing, retrieval, and LLM-based response generation.
+The next stage is to connect the retrieval pipeline to an LLM and build the complete end-to-end RAG question-answering system.
 
 ---
 
@@ -27,35 +34,37 @@ The project is designed to continue toward document chunking, embedding generati
 
 The project uses the **Crypto News / CoinDesk 2020–2025** dataset from Hugging Face.
 
-Dataset source:
+Dataset:
 
 `maryamfakhari/crypto-news-coindesk-2020-2025`
 
-The downloaded dataset contains approximately:
+The dataset contains approximately **229,000+ cryptocurrency news documents**.
 
-* **229,000+ news documents**
-* Original format: CSV
-* Fields include:
+### Original Dataset Format
 
-  * `id`
-  * `guid`
-  * `published_on`
-  * `title`
-  * `body`
-  * `url`
-  * `imageurl`
-  * `tags`
-  * `categories`
-  * `source`
-  * `upvotes`
-  * `downvotes`
-  * `last_update`
+The raw dataset is provided as a CSV file containing fields such as:
 
-The raw dataset is stored locally and is excluded from Git using `.gitignore`.
+* `id`
+* `guid`
+* `published_on`
+* `title`
+* `body`
+* `url`
+* `imageurl`
+* `tags`
+* `categories`
+* `source`
+* `upvotes`
+* `downvotes`
+* `last_update`
+
+The raw dataset is intentionally excluded from GitHub through `.gitignore` because of its size.
 
 ---
 
-## Project Pipeline
+## RAG Pipeline
+
+The implemented pipeline follows this workflow:
 
 ```text
 Raw CSV Dataset
@@ -69,10 +78,10 @@ JSONL Corpus
        v
 Text Preprocessing
        |
-       +--> HTML Removal
-       +--> Unicode Normalization
-       +--> Whitespace Cleanup
-       +--> Language Filtering
+       +---- HTML Removal
+       +---- Unicode Normalization
+       +---- Whitespace Cleanup
+       +---- Language Filtering
        |
        v
 Clean Corpus
@@ -81,21 +90,32 @@ Clean Corpus
 Document Chunking
        |
        v
-Embeddings
+Sentence-Transformer Embeddings
        |
        v
 ChromaDB Vector Database
        |
        v
-Retriever
+Semantic Search
        |
        v
-LLM / RAG Response
+Document Retrieval
+       |
+       v
+Retrieval Benchmarking
+       |
+       v
+LLM
+       |
+       v
+RAG Response
 ```
+
+The data preparation, preprocessing, chunking, embedding, vector storage, semantic search, and retrieval benchmarking stages have been implemented.
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
 RAG_Project/
@@ -105,17 +125,25 @@ RAG_Project/
 │   │   └── Document_5000.csv
 │   │
 │   └── processed/
+│       ├── crypto_news.jsonl
 │       └── clean_corpus_1.jsonl
 │
 ├── scripts/
-│   └── verify_env.py
+│   ├── verify_env.py
+│   ├── generate_embeddings.py
+│   ├── ingest_chroma.py
+│   ├── semantic_search.py
+│   ├── benchmark_embeddings.py
+│   └── benchmark_retrieval.py
 │
 ├── src/
 │   ├── __init__.py
-│   └── preprocessing.py
+│   ├── preprocessing.py
+│   └── chunking.py
 │
 ├── tests/
-│   └── test_preprocessing.py
+│   ├── test_preprocessing.py
+│   └── test_chunking.py
 │
 ├── prepare_dataset.py
 ├── pytest.ini
@@ -124,9 +152,11 @@ RAG_Project/
 └── README.md
 ```
 
+> Large datasets, generated vector databases, virtual environments, and other local artifacts are excluded from version control where appropriate.
+
 ---
 
-## Technologies Used
+# Technologies Used
 
 * **Python 3.12**
 * **Pandas**
@@ -136,27 +166,32 @@ RAG_Project/
 * **spaCy**
 * **PyTest**
 * **JSONL**
-* **Git & GitHub**
+* **Git**
+* **GitHub**
 
 ---
 
-## Environment
+# Environment
 
-The project uses a Python virtual environment to isolate dependencies.
+The project runs inside an isolated Python virtual environment.
 
-Python version:
+### Python Version
 
 ```text
 Python 3.12.7
 ```
 
-The current environment was configured for CPU-based execution.
+### Hardware
 
-GPU verification confirms that CUDA is not available on the current machine.
+The current development environment uses CPU-based processing.
+
+CUDA/GPU acceleration is not available on the current machine.
+
+The environment verification script checks the installed dependencies and available hardware configuration.
 
 ---
 
-## Environment Verification
+# Environment Verification
 
 The project includes:
 
@@ -164,32 +199,36 @@ The project includes:
 scripts/verify_env.py
 ```
 
-This script verifies the required environment and libraries.
+Run it with:
 
-The environment verification successfully confirms the availability of:
+```bash
+python scripts/verify_env.py
+```
+
+The script verifies the project environment and required machine-learning libraries, including:
 
 * NumPy
 * Pandas
 * Sentence Transformers
 * ChromaDB
 * spaCy
-* Python environment
+* PyTorch
 
 ---
 
-## Data Preparation
+# Data Preparation
 
-The raw CSV dataset is converted into a JSONL corpus using:
+The raw cryptocurrency news dataset is converted into a JSONL corpus using:
 
 ```text
 prepare_dataset.py
 ```
 
-The generated corpus contains the news documents in a format suitable for subsequent NLP processing.
+This converts the original CSV dataset into a document-oriented format that can be processed efficiently by the NLP pipeline.
 
 ---
 
-## Text Preprocessing
+# Text Preprocessing
 
 The preprocessing pipeline is implemented in:
 
@@ -197,33 +236,137 @@ The preprocessing pipeline is implemented in:
 src/preprocessing.py
 ```
 
-It performs the following operations:
+The preprocessing stage performs several operations.
 
-### 1. HTML Stripping
+### HTML Removal
 
-Removes HTML tags and unwanted markup from article content.
+Removes HTML tags and unwanted markup from the news articles.
 
-### 2. Unicode Normalization
+### Unicode Normalization
 
 Normalizes Unicode characters to provide consistent text representation.
 
-### 3. Whitespace Cleanup
+### Whitespace Cleanup
 
 Removes unnecessary spaces, line breaks, and formatting artifacts.
 
-### 4. Language Filtering
+### Language Filtering
 
-Filters documents according to the preprocessing requirements.
+Filters documents according to the project's language-processing requirements.
 
-### 5. Clean Corpus Generation
+### Clean Corpus
 
-The processed documents are stored as JSONL for the next stage of the RAG pipeline.
+The resulting documents are stored in JSONL format for downstream processing.
 
 ---
 
-## Testing
+# Document Chunking
 
-Automated tests are implemented using PyTest.
+Document chunking is implemented in:
+
+```text
+src/chunking.py
+```
+
+Long news articles are divided into smaller text chunks before embedding.
+
+Chunking is important for RAG because smaller, meaningful sections allow the retrieval system to return more relevant portions of documents rather than retrieving entire long articles.
+
+The chunking implementation is covered by automated tests in:
+
+```text
+tests/test_chunking.py
+```
+
+---
+
+# Embedding Generation
+
+Embeddings are generated using **Sentence Transformers**.
+
+The implementation is located in:
+
+```text
+scripts/generate_embeddings.py
+```
+
+The embedding stage converts text chunks into numerical vector representations.
+
+These vectors allow the system to compare documents based on semantic similarity rather than simple keyword matching.
+
+---
+
+# Embedding Benchmarking
+
+Embedding performance is evaluated using:
+
+```text
+scripts/benchmark_embeddings.py
+```
+
+The benchmark is used to evaluate the embedding pipeline and provide performance information about the embedding generation process.
+
+---
+
+# ChromaDB Vector Database
+
+The generated embeddings are stored in **ChromaDB**.
+
+The ingestion pipeline is implemented in:
+
+```text
+scripts/ingest_chroma.py
+```
+
+The vector database provides persistent storage and enables efficient similarity-based retrieval of relevant document chunks.
+
+---
+
+# Semantic Search
+
+Semantic search is implemented in:
+
+```text
+scripts/semantic_search.py
+```
+
+Instead of searching only for exact keywords, the system converts the search query into an embedding and retrieves documents that are semantically similar to the query.
+
+Conceptually:
+
+```text
+User Query
+     |
+     v
+Query Embedding
+     |
+     v
+ChromaDB
+     |
+     v
+Similarity Search
+     |
+     v
+Relevant Chunks
+```
+
+---
+
+# Retrieval Benchmarking
+
+Retrieval performance is evaluated using:
+
+```text
+scripts/benchmark_retrieval.py
+```
+
+This allows the retrieval stage to be tested and benchmarked before connecting it to the generation component of the RAG system.
+
+---
+
+# Testing
+
+Automated tests are implemented using **PyTest**.
 
 Run:
 
@@ -231,43 +374,47 @@ Run:
 pytest -q
 ```
 
+The project currently contains automated tests covering preprocessing and document chunking.
+
 Current test status:
 
 ```text
 13 passed
 ```
 
-The tests cover the preprocessing functionality and help ensure that changes to the pipeline do not break existing behavior.
+Tests help ensure that changes to the preprocessing and chunking pipeline do not introduce regressions.
 
 ---
 
-## Installation
+# Installation
 
-Clone the repository:
+## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Remington7002/RAG_Project.git
 ```
 
-Enter the project directory:
+## 2. Enter the Project Directory
 
 ```bash
 cd RAG_Project
 ```
 
-Create a virtual environment:
+## 3. Create the Virtual Environment
 
 ```bash
 py -3.12 -m venv venv
 ```
 
-Activate it on Windows:
+## 4. Activate the Virtual Environment
+
+Windows PowerShell:
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-Install dependencies:
+## 5. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -275,43 +422,74 @@ pip install -r requirements.txt
 
 ---
 
-## Running the Project
+# Running the Project
 
-### Verify Environment
+## Verify the Environment
 
 ```bash
 python scripts/verify_env.py
 ```
 
-### Prepare Dataset
+## Prepare the Dataset
 
 ```bash
 python prepare_dataset.py
 ```
 
-### Run Preprocessing
+## Run Preprocessing
 
 ```bash
 python src/preprocessing.py
 ```
 
-### Run Tests
+## Run Tests
 
 ```bash
 pytest -q
 ```
 
+## Generate Embeddings
+
+```bash
+python scripts/generate_embeddings.py
+```
+
+## Ingest Embeddings into ChromaDB
+
+```bash
+python scripts/ingest_chroma.py
+```
+
+## Perform Semantic Search
+
+```bash
+python scripts/semantic_search.py
+```
+
+## Benchmark Embeddings
+
+```bash
+python scripts/benchmark_embeddings.py
+```
+
+## Benchmark Retrieval
+
+```bash
+python scripts/benchmark_retrieval.py
+```
+
 ---
 
-## Current Progress
+# Project Progress
 
-### Completed
+## Week 1 — Environment & Data Preparation
 
 * [x] Python virtual environment
 * [x] Python 3.12 environment
 * [x] Dependency installation
 * [x] Environment verification
-* [x] Large crypto-news dataset downloaded
+* [x] CPU environment verification
+* [x] Large cryptocurrency news dataset downloaded
 * [x] 229K+ documents prepared
 * [x] CSV → JSONL conversion
 * [x] HTML stripping
@@ -323,40 +501,41 @@ pytest -q
 * [x] Git repository setup
 * [x] GitHub repository setup
 
-### Next Steps
+## Week 2 — RAG Processing & Retrieval
 
-* [ ] Document chunking
-* [ ] Chunk quality testing
-* [ ] Sentence-transformer embeddings
-* [ ] ChromaDB vector indexing
-* [ ] Semantic similarity search
-* [ ] Retriever implementation
-* [ ] RAG prompt construction
-* [ ] LLM integration
-* [ ] End-to-end RAG pipeline
-* [ ] Retrieval evaluation
-* [ ] Final documentation
+* [x] Document chunking
+* [x] Chunk quality testing
+* [x] Sentence-Transformer embeddings
+* [x] Embedding generation
+* [x] Embedding benchmarking
+* [x] ChromaDB vector database setup
+* [x] Document ingestion into ChromaDB
+* [x] Semantic similarity search
+* [x] Retriever implementation
+* [x] Retrieval benchmarking
+* [x] Chunking automated tests
+
 
 ---
 
-## Git Workflow
+# Git Workflow
 
-After making changes:
+Check the current repository state:
 
 ```bash
 git status
 ```
 
-Add the changes:
+Stage the complete project:
 
 ```bash
 git add .
 ```
 
-Commit:
+Commit changes:
 
 ```bash
-git commit -m "Update RAG preprocessing pipeline"
+git commit -m "Update complete RAG pipeline"
 ```
 
 Push to GitHub:
@@ -365,13 +544,13 @@ Push to GitHub:
 git push origin main
 ```
 
-If the remote repository contains changes that are not available locally, synchronize first:
+If the remote repository contains commits that are not available locally:
 
 ```bash
 git pull origin main --allow-unrelated-histories
 ```
 
-Then push:
+Then push again:
 
 ```bash
 git push origin main
@@ -379,19 +558,21 @@ git push origin main
 
 ---
 
-## Repository
-
-GitHub:
+# GitHub Repository
 
 **Remington7002/RAG_Project**
 
-The repository contains the source code, preprocessing pipeline, tests, configuration, and project documentation. Large datasets and environment-specific files are excluded from version control through `.gitignore`.
+The repository contains the RAG source code, preprocessing pipeline, chunking implementation, embedding scripts, ChromaDB ingestion, semantic search, benchmarking scripts, automated tests, configuration, and project documentation.
+
+Large datasets and local environment files are intentionally excluded from GitHub.
 
 ---
 
-## Purpose
+# Project Goals
 
-The purpose of this project is to build a practical understanding of the complete RAG workflow:
+The main goal of this project is to understand and implement the major components of a Retrieval-Augmented Generation system.
+
+The overall architecture is:
 
 ```text
 Data Collection
@@ -400,15 +581,29 @@ Data Cleaning
       ↓
 Document Processing
       ↓
-Chunking
+Document Chunking
       ↓
-Embedding
+Embedding Generation
       ↓
 Vector Storage
       ↓
-Retrieval
+Semantic Retrieval
       ↓
-Generation
+Context Construction
+      ↓
+LLM Generation
+      ↓
+RAG Response
 ```
 
-This project serves as the foundation for implementing a complete Retrieval-Augmented Generation system over a large cryptocurrency news corpus.
+The project currently has the **data processing, chunking, embedding, vector storage, semantic search, and retrieval stages completed**.
+
+The remaining work focuses on connecting the retrieval system to an LLM and producing context-aware generated responses.
+
+---
+
+# Author
+
+**Ahmed Raza**
+
+AI/ML Internship — Retrieval-Augmented Generation Project
